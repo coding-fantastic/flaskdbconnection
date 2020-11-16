@@ -1,5 +1,4 @@
-from flask import Flask
-
+from flask import Flask  , render_template , request , redirect , url_for
 from flask_sqlalchemy import SQLAlchemy
 
 
@@ -22,8 +21,16 @@ class User(db.Model):
 
 @app.route('/')
 def index():
-   return "<h1>am here </h2>"
+   return render_template('add_user.html')
 
+
+@app.route('/post_user', methods=['GET', 'POST'])
+def post_user():
+
+    user = User(request.form['username'], request.form['email'])
+    db.session.add(user)
+    db.session.commit()
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
